@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FileMenu {
 
-    public static void open(TextArea tArea, Stage primaryStage) {
+    public void open(TextArea tArea, Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
 
         File selectedFile = fileChooser.showOpenDialog(primaryStage);
@@ -26,7 +26,7 @@ public class FileMenu {
         }
     }
 
-    public static void save(TextArea tArea, Stage primaryStage) {
+    public void save(TextArea tArea, Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -43,7 +43,7 @@ public class FileMenu {
         }
     }
 
-    public static void newFile(TextArea tArea, Stage primaryStage) {
+    public void newFile(TextArea tArea, Stage primaryStage) {
         tArea.clear();
         Main.setStageTitle(null, primaryStage);
     }

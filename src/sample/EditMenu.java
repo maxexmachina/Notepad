@@ -7,7 +7,7 @@ import javafx.scene.input.ClipboardContent;
 
 public class EditMenu {
 
-    public static void cut(TextArea tArea, Clipboard systemClipboard) {
+    public void cut(TextArea tArea, Clipboard systemClipboard) {
         String text = tArea.getSelectedText();
         ClipboardContent content = new ClipboardContent();
         content.putString(text);
@@ -22,14 +22,14 @@ public class EditMenu {
         tArea.positionCaret(range.getStart());
     }
 
-    public static void copy(TextArea tArea, Clipboard systemClipboard) {
+    public void copy(TextArea tArea, Clipboard systemClipboard) {
         String text = tArea.getSelectedText();
         ClipboardContent content = new ClipboardContent();
         content.putString(text);
         systemClipboard.setContent(content);
     }
 
-    public static void paste(TextArea tArea, Clipboard systemClipboard) {
+    public void paste(TextArea tArea, Clipboard systemClipboard) {
         String clipboardText = systemClipboard.getString();
         IndexRange range = tArea.getSelection();
 
@@ -45,7 +45,7 @@ public class EditMenu {
         }
     }
 
-    public static void delete(TextArea tArea, Clipboard systemClipboard) {
+    public void delete(TextArea tArea, Clipboard systemClipboard) {
         IndexRange range = tArea.getSelection();
 
         String origText = tArea.getText();

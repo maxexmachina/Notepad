@@ -39,13 +39,14 @@ public class Main extends Application {
         MenuItem open = new MenuItem("Open...");
         MenuItem save = new MenuItem("Save");
 
-        newFile.setOnAction(event -> FileMenu.newFile(tArea, primaryStage));
+        FileMenu fm = new FileMenu();
+        newFile.setOnAction(event -> fm.newFile(tArea, primaryStage));
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 
-        open.setOnAction(event -> FileMenu.open(tArea, primaryStage));
+        open.setOnAction(event -> fm.open(tArea, primaryStage));
         open.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
 
-        save.setOnAction(event -> FileMenu.save(tArea, primaryStage));
+        save.setOnAction(event -> fm.save(tArea, primaryStage));
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
         file.getItems().addAll(newFile, open, save);
@@ -59,16 +60,17 @@ public class Main extends Application {
         MenuItem paste = new MenuItem("Paste");
         MenuItem delete = new MenuItem("Delete");
 
-        cut.setOnAction(event -> EditMenu.cut(tArea, systemClipboard));
+        EditMenu em = new EditMenu();
+        cut.setOnAction(event -> em.cut(tArea, systemClipboard));
         cut.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
 
-        copy.setOnAction(event -> EditMenu.copy(tArea, systemClipboard));
+        copy.setOnAction(event -> em.copy(tArea, systemClipboard));
         copy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
 
-        paste.setOnAction(event -> EditMenu.paste(tArea, systemClipboard));
+        paste.setOnAction(event -> em.paste(tArea, systemClipboard));
         paste.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
 
-        delete.setOnAction(event -> EditMenu.delete(tArea, systemClipboard));
+        delete.setOnAction(event -> em.delete(tArea, systemClipboard));
         delete.setAccelerator(new KeyCodeCombination(KeyCode.DELETE));
 
         edit.getItems().addAll(cut, copy, paste, delete);
