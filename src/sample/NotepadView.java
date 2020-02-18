@@ -10,11 +10,8 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class NotepadView extends VBox {
-    private Stage stage;
-
     private HBox topButtons = new HBox();
 
     private MenuButton file = new MenuButton("File");
@@ -33,10 +30,10 @@ public class NotepadView extends VBox {
 
     private TextArea tArea = new TextArea();
 
-    private final NotepadViewModel viewModel = new NotepadViewModel();
+    private NotepadViewModel viewModel;
 
-    public NotepadView(Stage primaryStage) {
-        stage = primaryStage;
+    public NotepadView(NotepadViewModel viewModel) {
+        this.viewModel = viewModel;
         createView();
         bindViewModel();
     }
@@ -61,10 +58,10 @@ public class NotepadView extends VBox {
 
         file.getItems().addAll(newFile, open, save);
 
-//        cut.setOnAction( this::cut );
-//        copy.setOnAction( this::copy );
-//        paste.setOnAction( this::paste );
-//        delete.setOnAction( this::delete );
+//      cut.setOnAction( this::cut );
+//      copy.setOnAction( this::copy );
+//      paste.setOnAction( this::paste );
+//      delete.setOnAction( this::delete );
 
         cut.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
         copy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
@@ -86,15 +83,15 @@ public class NotepadView extends VBox {
     }
 
     private void newFile(ActionEvent event) {
-        viewModel.newFile(stage);
+        viewModel.newFile();
     }
 
     private void open(ActionEvent event) {
-        viewModel.open(stage);
+        viewModel.open();
     }
 
     private void save(ActionEvent event) {
-        viewModel.save(stage);
+        viewModel.save();
     }
 
 //    private void cut(ActionEvent event) {

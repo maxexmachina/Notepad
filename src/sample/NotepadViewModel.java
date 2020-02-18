@@ -14,6 +14,11 @@ import java.net.URISyntaxException;
 
 public class NotepadViewModel {
     private final StringProperty textArea = new SimpleStringProperty();
+    private Stage primaryStage;
+
+    public NotepadViewModel(Stage stage) {
+        primaryStage = stage;
+    }
 
     public StringProperty textAreaProperty() {
         return textArea;
@@ -27,12 +32,12 @@ public class NotepadViewModel {
         textArea.set(text);
     }
 
-    public void newFile(Stage primaryStage) {
+    public void newFile() {
         setText("");
         Main.setStageTitle(null, primaryStage);
     }
 
-    public void open(Stage primaryStage) {
+    public void open() {
         FileChooser fileChooser = new FileChooser();
 
         File selectedFile = fileChooser.showOpenDialog(primaryStage);
@@ -54,7 +59,7 @@ public class NotepadViewModel {
         }
     }
 
-    public void save(Stage primaryStage) {
+    public void save() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);

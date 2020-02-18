@@ -21,7 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        NotepadView view = new NotepadView(primaryStage);
+        NotepadView view = new NotepadView(new NotepadViewModel(primaryStage));
 
         Scene scene = new Scene(view);
         if (primaryStage.getTitle() == null) {
