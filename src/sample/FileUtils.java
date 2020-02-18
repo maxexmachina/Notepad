@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class FileUtils {
 
-    public static List<String> readAll(String path) throws FileNotFoundException {
+    public static List<String> readAll(String path) throws IOException {
         List<String> result = new ArrayList<>();
         try (Scanner scanner = new Scanner(new FileReader(path))) {
             while (scanner.hasNext()) {
@@ -38,6 +38,7 @@ public class FileUtils {
 
     public static void saveFile(String content, File file) throws IOException {
         try(FileWriter fw = new FileWriter(file)) {
+            if (content != null)
             fw.write(content);
         }
     }
