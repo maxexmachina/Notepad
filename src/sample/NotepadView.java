@@ -34,7 +34,7 @@ public class NotepadView extends VBox {
     public NotepadView(NotepadViewModel viewModel) {
         this.viewModel = viewModel;
         configureView();
-        bindViewModel();
+        tArea.textProperty().bindBidirectional(viewModel.textAreaProperty());
     }
 
     private void configureView() {
@@ -74,9 +74,5 @@ public class NotepadView extends VBox {
 
         topButtons.getChildren().addAll(file, edit, help);
         this.getChildren().addAll(topButtons, tArea);
-    }
-
-    private void bindViewModel() {
-        tArea.textProperty().bindBidirectional(viewModel.textAreaProperty());
     }
 }
