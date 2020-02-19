@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
@@ -34,11 +33,11 @@ public class NotepadView extends VBox {
 
     public NotepadView(NotepadViewModel viewModel) {
         this.viewModel = viewModel;
-        createView();
+        configureView();
         bindViewModel();
     }
 
-    private void createView() {
+    private void configureView() {
         // Set options
         tArea.setWrapText(true);
         tArea.setStyle("-fx-focus-color: transparent;");
@@ -48,9 +47,9 @@ public class NotepadView extends VBox {
         help.setStyle("-fx-focus-color: transparent;");
 
         // Set event handlers
-        newFile.setOnAction( this::newFile );
-        open.setOnAction( this::open );
-        save.setOnAction( this::save );
+        newFile.setOnAction( event -> viewModel.newFile() );
+        open.setOnAction( event -> viewModel.open() );
+        save.setOnAction( event -> viewModel.save() );
 
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
         open.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
@@ -58,10 +57,10 @@ public class NotepadView extends VBox {
 
         file.getItems().addAll(newFile, open, save);
 
-        cut.setOnAction( this::cut );
-        copy.setOnAction( this::copy );
-        paste.setOnAction( this::paste );
-        delete.setOnAction( this::delete );
+        cut.setOnAction( event -> viewModel.cut(tArea.getSelectedText(), tArea.getSelection()) );
+        copy.setOnAction( event -> viewModel.copy(tArea.getSelectedText()) );
+        paste.setOnAction( event -> viewModel.paste(tArea.getSelection()) );
+        delete.setOnAction( event -> viewModel.delete(tArea.getSelection()) );
 
         cut.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
         copy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
@@ -70,9 +69,8 @@ public class NotepadView extends VBox {
 
         edit.getItems().addAll(cut, copy, paste, delete);
 
-        viewHelp.setOnAction( this::help );
+        viewHelp.setOnAction( event -> viewModel.help() );
         help.getItems().addAll(viewHelp);
-
 
         topButtons.getChildren().addAll(file, edit, help);
         this.getChildren().addAll(topButtons, tArea);
@@ -80,37 +78,5 @@ public class NotepadView extends VBox {
 
     private void bindViewModel() {
         tArea.textProperty().bindBidirectional(viewModel.textAreaProperty());
-    }
-
-    private void newFile(ActionEvent event) {
-        viewModel.newFile();
-    }
-
-    private void open(ActionEvent event) {
-        viewModel.open();
-    }
-
-    private void save(ActionEvent event) {
-        viewModel.save();
-    }
-
-    private void cut(ActionEvent event) {
-        viewModel.cut(tArea.getSelectedText(), tArea.getSelection());
-    }
-
-    private void copy(ActionEvent event) {
-        viewModel.copy(tArea.getSelectedText());
-    }
-
-    private void paste(ActionEvent event) {
-        viewModel.paste(tArea.getSelection());
-    }
-
-    private void delete(ActionEvent event) {
-        viewModel.delete(tArea.getSelection());
-    }
-
-    private void help(ActionEvent event) {
-        viewModel.help();
     }
 }
