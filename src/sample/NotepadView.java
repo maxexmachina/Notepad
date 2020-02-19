@@ -58,10 +58,10 @@ public class NotepadView extends VBox {
 
         file.getItems().addAll(newFile, open, save);
 
-//      cut.setOnAction( this::cut );
-//      copy.setOnAction( this::copy );
-//      paste.setOnAction( this::paste );
-//      delete.setOnAction( this::delete );
+        cut.setOnAction( this::cut );
+        copy.setOnAction( this::copy );
+        paste.setOnAction( this::paste );
+        delete.setOnAction( this::delete );
 
         cut.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
         copy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
@@ -94,21 +94,21 @@ public class NotepadView extends VBox {
         viewModel.save();
     }
 
-//    private void cut(ActionEvent event) {
-//        viewModel.cut();
-//    }
-//
-//    private void copy(ActionEvent event) {
-//        viewModel.copy();
-//    }
-//
-//    private void paste(ActionEvent event) {
-//        viewModel.paste();
-//    }
-//
-//    private void delete(ActionEvent event) {
-//        viewModel.delete();
-//    }
+    private void cut(ActionEvent event) {
+        viewModel.cut(tArea.getSelectedText(), tArea.getSelection());
+    }
+
+    private void copy(ActionEvent event) {
+        viewModel.copy(tArea.getSelectedText());
+    }
+
+    private void paste(ActionEvent event) {
+        viewModel.paste(tArea.getSelection());
+    }
+
+    private void delete(ActionEvent event) {
+        viewModel.delete(tArea.getSelection());
+    }
 
     private void help(ActionEvent event) {
         viewModel.help();

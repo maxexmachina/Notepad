@@ -3,6 +3,9 @@ package sample;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
+import javafx.scene.control.IndexRange;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -14,6 +17,7 @@ import java.net.URISyntaxException;
 
 public class NotepadViewModel {
     private final StringProperty textArea = new SimpleStringProperty();
+    private Clipboard systemClipboard = Clipboard.getSystemClipboard();
     private Stage primaryStage;
 
     public NotepadViewModel(Stage stage) {
@@ -78,56 +82,44 @@ public class NotepadViewModel {
             }
         }
     }
-//
-//    public void cut() {
-//        String text = tArea.getSelectedText();
-//        ClipboardContent content = new ClipboardContent();
-//        content.putString(text);
-//        systemClipboard.setContent(content);
-//
-//        IndexRange range = tArea.getSelection();
-//        String origText = tArea.getText();
-//        String firstPart = origText.substring(0, range.getStart());
-//        String lastPart = origText.substring(range.getEnd());
-//
-//        tArea.setText(firstPart + lastPart);
-//        tArea.positionCaret(range.getStart());
-//    }
-//
-//    public void copy() {
-//        String text = tArea.getSelectedText();
-//        ClipboardContent content = new ClipboardContent();
-//        content.putString(text);
-//        systemClipboard.setContent(content);
-//    }
-//
-//    public void paste() {
-//        String clipboardText = systemClipboard.getString();
-//        IndexRange range = tArea.getSelection();
-//
-//        String origText = tArea.getText();
-//        String firstPart = origText.substring(0, range.getStart());
-//        String lastPart = origText.substring(range.getEnd());
-//        String updText = firstPart + clipboardText + lastPart;
-//
-//        if (clipboardText != null) {
-//            tArea.setText(updText);
-//            tArea.positionCaret(range.getStart() + clipboardText.length());
-//            System.out.println(range.getStart() + clipboardText.length());
-//        }
-//    }
-//
-//    public void delete() {
-//        IndexRange range = tArea.getSelection();
-//
-//        String origText = tArea.getText();
-//        String firstPart = origText.substring(0, range.getStart());
-//        String lastPart = origText.substring(range.getEnd());
-//        String updText = firstPart + lastPart;
-//
-//        tArea.setText(updText);
-//        tArea.positionCaret(range.getStart());
-//    }
+
+    public void cut(String selectedText, IndexRange range) {
+
+        ClipboardContent content = new ClipboardContent();
+        content.putString(selectedText);
+        systemClipboard.setContent(content);
+
+        String firstPart = textAreaProperty().get().substring(0, range.getStart());
+        String lastPart = textAreaProperty().get().substring(range.getEnd());
+
+        setText(firstPart + lastPart);
+    }
+
+    public void copy(String selectedText) {
+        ClipboardContent content = new ClipboardContent();
+        content.putString(selectedText);
+        systemClipboard.setContent(content);
+    }
+
+    public void paste(IndexRange range) {
+        String clipboardText = systemClipboard.getString();
+
+        String firstPart = getText().substring(0, range.getStart());
+        String lastPart = getText().substring(range.getEnd());
+        String updText = firstPart + clipboardText + lastPart;
+
+        if (clipboardText != null) {
+            setText(updText);
+        }
+    }
+
+    public void delete(IndexRange range) {
+        String firstPart = getText().substring(0, range.getStart());
+        String lastPart = getText().substring(range.getEnd());
+        String updText = firstPart + lastPart;
+
+        setText(updText);
+    }
 
     public void help() {
         try {
