@@ -47,11 +47,11 @@ public class NotepadViewModel {
         File selectedFile = fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
             try {
-                String content = "";
+                StringBuilder content = new StringBuilder();
                 for (String line : FileUtils.readAll(selectedFile.getPath())) {
-                    content += line + "\n";
+                    content.append(line).append("\n");
                 }
-                setText(content);
+                setText(content.toString());
                 String fileName = selectedFile.getName();
                 Main.setStageTitle(fileName, primaryStage);
             } catch (IOException e) {

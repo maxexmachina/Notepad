@@ -1,30 +1,27 @@
 package sample;
 
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class NotepadView extends VBox {
-    private HBox topButtons = new HBox();
+    private MenuBar top = new MenuBar();
 
-    private MenuButton file = new MenuButton("File");
+    private Menu file = new Menu("File");
     private MenuItem newFile = new MenuItem("New");
     private MenuItem open = new MenuItem("Open...");
     private MenuItem save = new MenuItem("Save");
 
-    private MenuButton edit = new MenuButton("Edit");
+    private Menu edit = new Menu("Edit");
     private MenuItem cut = new MenuItem("Cut");
     private MenuItem copy = new MenuItem("Copy");
     private MenuItem paste = new MenuItem("Paste");
     private MenuItem delete = new MenuItem("Delete");
 
-    private MenuButton help = new MenuButton("Help");
+    private Menu help = new Menu("Help");
     private MenuItem viewHelp = new MenuItem("Get Help");
 
     private TextArea tArea = new TextArea();
@@ -42,9 +39,6 @@ public class NotepadView extends VBox {
         tArea.setWrapText(true);
         tArea.setStyle("-fx-focus-color: transparent;");
         VBox.setVgrow(tArea, Priority.ALWAYS);
-        file.setStyle("-fx-focus-color: transparent;");
-        edit.setStyle("-fx-focus-color: transparent;");
-        help.setStyle("-fx-focus-color: transparent;");
 
         // Set event handlers
         newFile.setOnAction( event -> viewModel.newFile() );
@@ -72,7 +66,7 @@ public class NotepadView extends VBox {
         viewHelp.setOnAction( event -> viewModel.help() );
         help.getItems().addAll(viewHelp);
 
-        topButtons.getChildren().addAll(file, edit, help);
-        this.getChildren().addAll(topButtons, tArea);
+        top.getMenus().addAll(file, edit, help);
+        getChildren().addAll(top, tArea);
     }
 }
