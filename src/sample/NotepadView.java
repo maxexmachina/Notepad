@@ -1,13 +1,21 @@
 package sample;
 
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
 
 public class NotepadView extends VBox {
+    private Stage primaryStage;
     private MenuBar top = new MenuBar();
 
     private Menu file = new Menu("File");
@@ -28,9 +36,14 @@ public class NotepadView extends VBox {
 
     private NotepadViewModel viewModel;
 
-    public NotepadView(NotepadViewModel viewModel) {
+    public NotepadView(NotepadViewModel viewModel, Stage stage) {
+        primaryStage = stage;
+
         this.viewModel = viewModel;
         configureView();
+        if (primaryStage.getTitle() == null) {
+            setStageTitle(null, primaryStage);
+        }
         tArea.textProperty().bindBidirectional(viewModel.textAreaProperty());
     }
 
@@ -41,9 +54,43 @@ public class NotepadView extends VBox {
         VBox.setVgrow(tArea, Priority.ALWAYS);
 
         // Set event handlers
-        newFile.setOnAction( event -> viewModel.newFile() );
-        open.setOnAction( event -> viewModel.open() );
-        save.setOnAction( event -> viewModel.save() );
+        newFile.setOnAction( event -> {
+            tArea.setText("");
+            setStageTitle(null, primaryStage);
+        });
+
+        open.setOnAction( event -> {
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            try {
+                viewModel.open(selectedFile);
+            } catch (IOException e) {
+                Alert errorDialog = new Alert(Alert.AlertType.ERROR);
+                errorDialog.setHeaderText("IOException thrown in Open method\n");
+                errorDialog.setContentText(e.getMessage());
+                errorDialog.showAndWait();
+            }
+            if (selectedFile != null)
+                setStageTitle(selectedFile.getName(), primaryStage);
+        } );
+
+        save.setOnAction( event -> {
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+            fileChooser.getExtensionFilters().add(extFilter);
+
+            File savedFile = fileChooser.showSaveDialog(primaryStage);
+            try {
+                viewModel.save(savedFile);
+            } catch (IOException e) {
+                Alert errorDialog = new Alert(Alert.AlertType.ERROR);
+                errorDialog.setHeaderText("IOException thrown in Save method\n");
+                errorDialog.setContentText(e.getMessage());
+                errorDialog.showAndWait();
+            }
+            if (savedFile != null)
+                setStageTitle(savedFile.getName(), primaryStage);
+        } );
 
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
         open.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
@@ -68,5 +115,13 @@ public class NotepadView extends VBox {
 
         top.getMenus().addAll(file, edit, help);
         getChildren().addAll(top, tArea);
+    }
+
+    private void setStageTitle(String fileName, Stage stage) {
+        if (fileName != null) {
+            stage.setTitle(fileName + " - Notepad");
+        } else {
+            stage.setTitle("Untitled - Notepad");
+        }
     }
 }

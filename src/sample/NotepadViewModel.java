@@ -6,8 +6,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.IndexRange;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.File;
@@ -18,11 +16,6 @@ import java.net.URISyntaxException;
 public class NotepadViewModel {
     private final StringProperty textArea = new SimpleStringProperty();
     private Clipboard systemClipboard = Clipboard.getSystemClipboard();
-    private Stage primaryStage;
-
-    public NotepadViewModel(Stage stage) {
-        primaryStage = stage;
-    }
 
     public StringProperty textAreaProperty() {
         return textArea;
@@ -36,55 +29,24 @@ public class NotepadViewModel {
         textArea.set(text);
     }
 
-    public void newFile() {
-        setText("");
-        Main.setStageTitle(null, primaryStage);
-    }
-
-    public void open() {
-        FileChooser fileChooser = new FileChooser();
-
-        File selectedFile = fileChooser.showOpenDialog(primaryStage);
-        if (selectedFile != null) {
-            try {
-                StringBuilder content = new StringBuilder();
-                for (String line : FileUtils.readAll(selectedFile.getPath())) {
-                    content.append(line).append("\n");
-                }
-                setText(content.toString());
-                String fileName = selectedFile.getName();
-                Main.setStageTitle(fileName, primaryStage);
-            } catch (IOException e) {
-                Alert errorDialog = new Alert(Alert.AlertType.ERROR);
-                errorDialog.setHeaderText("IOException thrown in Open method\n");
-                errorDialog.setContentText(e.getMessage());
-                errorDialog.showAndWait();
+    public void open(File file) throws IOException {
+        if (file != null) {
+            StringBuilder content = new StringBuilder();
+            for (String line : FileUtils.readAll(file.getPath())) {
+                content.append(line).append("\n");
             }
+            setText(content.toString());
         }
     }
 
-    public void save() {
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        File savedFile = fileChooser.showSaveDialog(primaryStage);
-        if (savedFile != null) {
-            try {
-                String fileName = savedFile.getName();
-                Main.setStageTitle(fileName, primaryStage);
-                FileUtils.saveFile(getText(), savedFile);
-            } catch (IOException e) {
-                Alert errorDialog = new Alert(Alert.AlertType.ERROR);
-                errorDialog.setHeaderText("IOException thrown in Save method\n");
-                errorDialog.setContentText(e.getMessage());
-                errorDialog.showAndWait();
-            }
+    public void save(File file) throws IOException {
+        if (file != null) {
+            System.out.println(file.getName());
+            FileUtils.saveFile(getText(), file);
         }
     }
 
     public void cut(String selectedText, IndexRange range) {
-
         ClipboardContent content = new ClipboardContent();
         content.putString(selectedText);
         systemClipboard.setContent(content);
